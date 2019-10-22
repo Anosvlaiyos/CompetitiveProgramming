@@ -1,34 +1,37 @@
-#include <bits/stdc++.h>
-#define pi 3.14159265358979
+#include<bits/stdc++.h>
 using namespace std;
-int rev(int t, int n) {
-	int i, q = 0;
-	for (i = 0; i<n; i++)q |= ((t >> i) & 1) << n - 1 - i;
-	return q;
+typedef long long ll;
+typedef complex<double>C;
+const double PI=acos(-1);
+vector<int>ord;
+vector<C>w;
+void getroots(int n){
+    if(w.size()>=n)return;
+    if(w.empty())w={{0,0},{1,0}};
+    int len=w.size();
+    w.resize(n);
+    for(;len<n;len<<=1){
+        double ang=PI/len;
+        for(int i=0;i<len;i++){
+            if(i&1)w[i+len]=polar(1.,i*ang);
+            else w[i+len]=w[(i+len)>>1];
+        }
+    }
 }
-void ord(complex<double> *ar, int n) {
-	int r;
-	complex<double> *t = new complex<double>[1 << n];
-	for (int i = 0; i<1 << n; i++)t[rev(i, n)] = ar[i];
-	for (int i = 0; i < 1 << n; i++)ar[i] = t[i];
-	delete t;
+void reorder(vector<C>&a){
+    int n=a.size();
+    if(ord.size()!=n){
+        ord.assign(n,0);
+        int len=__builtin_ctz(n);
+        for(int i=0;i<n;i++)ord[i]=(ord[i>>1]>>1)|((i&1)<<len-1);
+    }
+    for(int i=0;i<n;i++)if(i<ord[i])swap(a[i],a[ord[i]]);
 }
-void fft(complex<double> *ar, int n, bool inv = 0) {
-	int N = 1 << n, i, j, k, mod = N - 1;
-	long long sc = 1 << n - 1;
-	complex<double> *w = new complex<double>[N], aa, bb;
-	ord(ar, n);
-	for (i = 0; i<N; i++)w[i] = polar(1., (inv ? 1 : -1)* 2.*i*pi / N);
-	for (i = 0; i<n; i++, sc >>= 1) {
-		for (j = 0; j<N; j++) {
-			if (j&(1 << i))continue;
-			k = j | (1 << i);
-			aa = ar[j] + ar[k] * w[(sc*j)&mod];
-			bb = ar[j] + ar[k] * w[(sc*k)&mod];
-			ar[j] = aa;
-			ar[k] = bb;
-		}
-	}
-	if (inv)for (i = 0; i<N; i++)ar[i] /= N;
-	delete w;
+void fft(vector<C>&a){
+    int n=a.size();
+    getroots(n),reorder(a);
+    for(int len=1;len<n;len<<=1)for(int i=0;i<n;i+=len<<1)for(int j=0;j<len;j++){
+        C u=a[i+j],v=a[i+j+len]*w[j+len];
+        a[i+j]=u+v,a[i+j+len]=u-v;
+    }
 }

@@ -33,7 +33,7 @@ void fft(vector<ll>&a){
     int n=a.size();
     getroots(n),reorder(a);
     for(int len=1;len<n;len<<=1)for(int i=0;i<n;i+=len<<1)for(int j=0;j<len;j++){
-        ll u=a[i+j],v=[i+j+len]*w[j+len];
+        ll u=a[i+j],v=a[i+j+len]*w[j+len];
         a[i+j]=(u+v)%mod,a[i+j+len]=(u-v)%mod;
     }
 }

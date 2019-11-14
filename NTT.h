@@ -37,6 +37,3 @@ void fft(vector<ll>&a){
         a[i+j]=(u+v)%mod,a[i+j+len]=(u-v)%mod;
     }
 }
-int main(){
-
-}

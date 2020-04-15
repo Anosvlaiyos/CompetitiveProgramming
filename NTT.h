@@ -15,7 +15,7 @@ void getroots(int n){
     int len=w.size();
     w.resize(n);
     for(;len<n;len<<=1){
-        ll mult=po(2,(mod-1)/(2*len));
+        ll mult=po(3,(mod-1)/(2*len));
         w[len]=1;
         for(int i=1;i<len;i++)w[i+len]=w[i+len-1]*mult%mod;
     }

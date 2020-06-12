@@ -8,7 +8,7 @@ struct l{
 int th[100000];
 vector<l> cvx;
 bool die(l a,l b,l c){
-    return (a.b-b.b)/(b.m-a.m)>(a.b-c.b)/(c.m-a.m);
+    return (a.b-b.b)/(b.m-a.m)>(b.b-c.b)/(c.m-b.m);
 }
 void push(l a){
     while(cvx.size()>=2&&die(cvx[cvx.size()-2],cvx[cvx.size()-1],a))cvx.pop_back();
@@ -29,7 +29,7 @@ int query(ll x){
 
 
 bool die(line a, line b, line c) {
-	return (a.b - b.b) / (b.m - a.m) >= (a.b - c.b) / (c.m - a.m);
+	return (a.b - b.b) / (b.m - a.m) >= (b.b - c.b) / (c.m - b.m);
 }
 struct cvx {
 	vector<line> v;

@@ -4,14 +4,13 @@ typedef long long ll;
 struct NTT{
     const ll mod=998244353;
     vector<int>ord;
-    vector<ll>w;
+    vector<ll>w={0,1};
     ll po(ll a,ll b){
         ll ans=1;
         for(;b;b>>=1,a*=a,a%=mod)if(b&1)ans*=a,ans%=mod;
         return ans;
     }
     void getroots(int n){
-        if(w.size()>=n)return;
         if(w.empty())w={0,1};
         int len=w.size();
         w.resize(n);

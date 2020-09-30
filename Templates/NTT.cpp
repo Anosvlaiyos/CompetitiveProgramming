@@ -38,9 +38,23 @@ struct NTT{
         }
     }
     void ifft(vector<ll>&a){ 
+        int n=a.size();
         ll k=po(n,mod-2);
         for(ll&x:a)x*=k,x%=mod;
         reverse(a.begin()+1,a.end());
         fft(a);
+    }
+    vector<ll> convolve(vector<ll>a, vector<ll>b){
+        int n=a.size()+b.size()-1;
+        n=1<<32-__builtin_clz(n-1);
+        a.resize(n),b.resize(n);
+        fft(a),fft(b);
+        ll in=po(n,mod-2);
+        vector<ll>c(n);
+        for(int i=0;i<n;i++)c[i]=a[i]*b[i]%mod*in%mod;
+        reverse(c.begin()+1,c.end());
+        fft(c);
+        while(c.size()>=2&&!c.back())c.pop_back();
+        return c;
     }
 };
